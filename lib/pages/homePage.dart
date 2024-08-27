@@ -22,7 +22,8 @@ class _homePageState extends State<HomePage> {
       body: Container(
         height: _height * 1,
         width: _width * 1,
-        decoration: const BoxDecoration(color: Colors.purple),
+        decoration:
+            const BoxDecoration(color: Color.fromARGB(255, 182, 93, 255)),
       ),
     );
   }
