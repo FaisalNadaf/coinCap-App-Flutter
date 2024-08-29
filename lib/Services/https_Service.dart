@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:dio/dio.dart';
 import '../models/app_config.dart';
 import 'package:get_it/get_it.dart';
@@ -13,7 +14,7 @@ class HTTPService {
   }
 
   Future<Response?> get(String path) async {
-    try {
+    try {                        
       String _url = "$_baseUrl$path";
       Response _response = await dio.get(_url);
       return _response;

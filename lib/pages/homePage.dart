@@ -38,7 +38,7 @@ class _homePageState extends State<HomePage> {
   }
 
   Widget _coinDropDown() {
-    List<String> _coins = ["bitcoin", "doge"];
+    List<String> _coins = ["bitcoin", "doge", "A", "S", "dasd", "aqr", "adas"];
     List<DropdownMenuItem<String>> _item = _coins
         .map(
           (e) => DropdownMenuItem(
@@ -66,5 +66,9 @@ class _homePageState extends State<HomePage> {
       iconSize: 30,
       underline: Container(),
     );
+  }
+  
+  Widget  _datacontainer(){
+    return const  FutureBuilder(future: null, builder:(BuildContext _context,AsyncSnapshot _snapShot) );
   }
 }
