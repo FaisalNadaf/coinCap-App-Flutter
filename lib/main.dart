@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:coincap_app_flutter/Services/https_Service.dart';
 import 'package:coincap_app_flutter/models/app_config.dart';
 import 'package:coincap_app_flutter/pages/homePage.dart';
@@ -17,7 +16,7 @@ void main() async {
 Future<void> loadConfig() async {
   String _configContent =
       await rootBundle.loadString("assets/config/main.json");
-  Map _configData = jsonDecode(_configContent);
+  Map<String, dynamic> _configData = jsonDecode(_configContent);
   GetIt.instance.registerSingleton<AppConfig>(
     AppConfig(
       COIN_API_BASE_URL: _configData["COIN_API_BASE_URL"],
