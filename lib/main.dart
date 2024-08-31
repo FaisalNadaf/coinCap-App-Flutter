@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
         title: 'Coin Cap',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          scaffoldBackgroundColor: Color.fromARGB(255, 117, 33, 253),
+          scaffoldBackgroundColor:const Color.fromARGB(255, 117, 33, 253),
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),

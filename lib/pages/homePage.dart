@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:coincap_app_flutter/Services/https_Service.dart';
+import 'package:coincap_app_flutter/pages/detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 
@@ -45,7 +46,7 @@ class _homePageState extends State<HomePage> {
   }
 
   Widget _coinDropDown() {
-    List<String> _coins = ["bitcoin", "doge", "A", "S", "dasd", "aqr", "adas"];
+    List<String> _coins = ["bitcoin", "doge", "bnb", "solana", "usdc", "xrp"];
     List<DropdownMenuItem<String>> _item = _coins
         .map(
           (e) => DropdownMenuItem(
@@ -64,8 +65,12 @@ class _homePageState extends State<HomePage> {
     return DropdownButton(
       value: _coins.first,
       items: _item,
-      onChanged: (_value) {},
-      dropdownColor: Color.fromARGB(255, 98, 0, 255),
+      onChanged: (_value) {
+        setState(() {
+          _selectedCoin = _value;
+        });
+      },
+      dropdownColor: const Color.fromARGB(255, 98, 0, 255),
       icon: const Icon(
         Icons.arrow_drop_down_sharp,
         color: Colors.white,
@@ -83,12 +88,38 @@ class _homePageState extends State<HomePage> {
             Map _data = jsonDecode(
               _snapShot.data.toString(),
             );
+
             num _usdPrice = _data["market_data"]["current_price"]["usd"];
             num _ath_change_percentage =
                 _data["market_data"]["ath_change_percentage"]["usd"];
-            return _currentPrice(_usdPrice, _ath_change_percentage);
+            bool red;
+            if (_ath_change_percentage.isNegative) {
+              red = true;
+            } else {
+              red = false;
+            }
+            return Column(
+              children: [
+                GestureDetector(
+                  onDoubleTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext _context) {
+                          return DetailPage();
+                        },
+                      ),
+                    );
+                  },
+                  child: _imgContainer(
+                    _data["image"]["large"],
+                  ),
+                ),
+                _currentPrice(_usdPrice, _ath_change_percentage, red),
+                _aboutCrypto(_data["description"]["en"]),
+              ],
+            );
           } else {
-            print("DATA :$_snapShot.data.toString()");
             return const Center(
               child: CircularProgressIndicator(
                 color: Colors.white,
@@ -98,27 +129,57 @@ class _homePageState extends State<HomePage> {
         });
   }
 
-  Widget _currentPrice(num price, num ath) {
-    return Container(
-      child: Column(
-        children: [
-          Text(
-            price.toString() + " USD",
-            style: const TextStyle(
-              fontSize: 30,
-              color: Colors.white,
-              fontWeight: FontWeight.w100,
-            ),
+  Widget _currentPrice(num price, num ath, bool red) {
+    return Column(
+      children: [
+        Text(
+          price.toStringAsFixed(2) + " USD",
+          style: const TextStyle(
+            fontSize: 30,
+            color: Colors.white,
+            fontWeight: FontWeight.w100,
           ),
-          Text(
-            ath.toString() + "%",
-            style: const TextStyle(
-              fontSize: 15,
-              color: Color.fromARGB(255, 146, 146, 146),
-              fontWeight: FontWeight.w100,
-            ),
-          )
-        ],
+        ),
+        Text(
+          ath.toString() + "%",
+          style: TextStyle(
+            fontSize: 15,
+            color: red
+                ? const Color.fromARGB(255, 238, 16, 0)
+                : Color.fromARGB(255, 175, 175, 175),
+            fontWeight: FontWeight.w100,
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _imgContainer(String img) {
+    return Container(
+      margin: EdgeInsets.symmetric(
+        vertical: _height * 0.02,
+      ),
+      height: _height * 0.08,
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: NetworkImage(
+            img.toString(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _aboutCrypto(String data) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: _height * 0.03),
+      height: _height * 0.4,
+      width: _width * 0.8,
+      child: Text(
+        data,
+        style: const TextStyle(
+          color: Colors.white,
+        ),
       ),
     );
   }
